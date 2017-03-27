@@ -45,9 +45,53 @@ int tcp_server::init()
     }
 }
 
-void accept_cli()
+void accept_cli(int sockfd)
 {
-    
+    char space;
+    char line[3];
+    int flag = recv(sockfd,&space,1,NULL);
+    if (flag == -1)
+    {
+        return;
+    }
+    flag = recv(sockfd,line,3,NULL);
+    if (flag == -1)
+    {
+        return;
+    }
+    switch(hash_(line))
+    {
+        case "act"_hash:
+            {
+                //get the record from gps  so we should call the connect gps interface
+            }
+        case "con"_hash:
+            {
+                //get the gps record from database 
+            }
+    }
+
+}
+
+void accept_pli(sockfd)
+{
+    char space;
+    char line[3];
+    int flag = recv(sockfd,&space,1,NULL);
+    if (flag == -1)
+    {
+        return;
+    }
+    flag = recv(sockfd,line,3,NULL);
+    if (flag == -1)
+    {
+        return;
+    }
+    switch(hash_(line))
+    {
+        case ""
+    }
+
 }
 
 void exec(void* arg)
@@ -59,20 +103,20 @@ void exec(void* arg)
     {
         return;
     }
-    switch(line)
+    switch(hash_(line))
     {
-        case "cli":
+        case "cli"_hash:
             {
                 accept_cli(sockfd);
                 break;
             }
 
-        case "pli":
+        case "pli"_hash:
             {
                 accept_pli(sockfd);
                 break;
             }
-        case "gps":
+        case "gps"_hash:
             {
                 accept_gps(sockfd);///
                 break;
