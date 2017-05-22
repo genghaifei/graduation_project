@@ -24,7 +24,6 @@ class tcp_server
         int listen_sock;
         std::string _host_ip;
         unsigned int _host_port;
-        person per;
 };
 
 struct args

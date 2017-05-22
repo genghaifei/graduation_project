@@ -19,6 +19,3 @@ SER_FILE=$()
 
 $(SER_BIN):$(SER_OBJ)
 	@$(GXX) -g -o $@ $^ $(LIB_PATH) $(FLAG) $(LINK_LIB)
-
-
-
