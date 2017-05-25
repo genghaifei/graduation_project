@@ -61,19 +61,48 @@ void accept_cli(int sockfd)
     }
     switch(hash_(line))
     {
-        case "act"_hash:
+        case "get_gps"_hash://get the gps information
             {
                 //get the record from gps  so we should call the connect gps interface
             }
-        case "con"_hash:
+        case "get_gpd"_hash://get the orbit gps information
             {
                 //get the gps record from database 
             }
-    }
+        case "get_pID"_hash://get the person ID information
+	        {
+		
+	        }
+        case "get_car"_hash:
+            {
 
+            }
+        case "reg_per"_hash:
+            {
+
+            }
+        case "reg_car"_hash:
+            {
+
+            }
+        case "test_in"_hash:
+            {
+
+            }
+        case "dis_wor"_hash:
+            {
+                
+            }
+        case "con_wor"_hash:
+            {
+
+            }
+        
+    }
+        
 }
 
-void accept_pli(sockfd)
+void accept_pli(int sockfd)
 {
     char space;
     char line[3];
@@ -91,6 +120,14 @@ void accept_pli(sockfd)
     {
         case ""
     }
+
+}
+
+void accept_gps(int sockfd)
+{
+    char space;
+    char line[3];
+    int flag = recv(sockfd,&space,1,NULL);
 
 }
 
