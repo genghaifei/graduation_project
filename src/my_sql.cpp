@@ -10,7 +10,7 @@ sql_connector::sql_connector
 }
 sql_connector::~sql_connector
 {
-
+    close_connect();
 }
 
 int sql_connector::begin_connect()
@@ -57,7 +57,7 @@ int sql_connector::sql_insert(const std::string &sql)
     //int updatecount = 0;
     //updatecount = prep_stmt->executeUpdate();
 }
-int sql_connector::close_connect()
+void sql_connector::close_connect()
 {
     delete resultSet;
     delete stmt;
