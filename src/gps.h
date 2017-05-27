@@ -1,14 +1,8 @@
 #include <iostream>
+#include "basic.h"
+#include "my_sql.h"
 
-struct location_message
-{
-	double lat;
-	double lng;
-	std::string time;
-};
-
-typedef location_message Loc_m;
-
+typedef LOCATION Loc_m;
 class gps
 {
 	public:
@@ -23,6 +17,5 @@ class gps
 	bool set_worning_information(std::string worning_message,std::string time);//将报警信息写入数据库
 	bool call_client_worning_message();//告知客户端，报警信息。回调函数。
 	private:
-	unsigned int gps_number;//gps编号
-	db_connect conn;
-}；
+	sql_connector handle;
+};
