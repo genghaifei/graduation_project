@@ -24,13 +24,19 @@ struct PERSON
 struct CAR
 {
     std::string ID;
-    std::string Car_GPS_number;
+    std::string GPS_number;
     std::string Car_brand;
     std::string Car_number;
     std::string Car_VIN_number;
     std::string Car_type;
     std::string Car_buy_time;
     std::string Car_color;
+};
+
+struct COUNT
+{
+    std::string ID;
+    std::string passwd;
 };
 
 struct WORN
@@ -60,4 +66,4 @@ struct LIST_IN
 const std::string _host("");
 const std::string _usr("");
 const std::string _passwd("");
-const std::string _db("")
+const std::string _db("");

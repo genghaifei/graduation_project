@@ -1,6 +1,5 @@
 #include "basic.h"
 
-
 hash_t hash_(char const* str)
 {
     hash_t ret{basis}; //   C++11 features  use {} to  initialize the variable  it can't happen  type conversion
