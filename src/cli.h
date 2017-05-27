@@ -1,6 +1,8 @@
 #ifndef  __CLI_H_
 #define  __CLI_H_
 
+#include <exception>
+#include <stdexcept>
 #include <iostream>
 #include "basic.h"
 #include "my_sql.h"
@@ -13,23 +15,21 @@ class cli
         cli();
         ~cli();
     public:
-        int register_person_information(PERSON);
-        int register_car_information(CAR);
+        int register_person_information(const PERSON &);
+        int register_car_information(const CAR &);
     public:
-        void get_gps_information(LOCATION loc);
-        void get_person_information(PERSON per);
-        void get_car_information(CAR car);
-        void test_sign_in_information();//sign in test
-        void dispaly_worning_information();
+        void get_gps_information(LOCATION &loc,const std::string &GPS_number);
+        void get_person_information(PERSON &per,const std::string &);
+        void get_car_information(CAR &car,const std::string&);
+        bool test_sign_in_information(const COUNT &count);//sign in test
+        void display_worning_information(CAR &,const WORN &);
         void confirm_worning_information();
     private:
        // void get_database_connector();construction function write
-        void set_gps_information();
-        void set_person_information();
-        void set_car_information();
-        void mix_worning_information();
+        void set_gps_information(const LOCATION &);
+        void set_car_information(const CAR &);
     private:
-        sql::mysql::MySQL_Driver *driver;
+        sql_connector sql_handle;
         int cli_id;
         std::vector<LIST_IN> list;
 };
