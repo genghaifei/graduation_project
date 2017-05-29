@@ -3,8 +3,8 @@ GXX=g++
 GCC=gcc
 FLAG=-g -std=c++11
 LINK_LIBS=-lpthread
-LIB_PATH=
-INCLUDE= -I${ROOT_PATH}/mysql_lib/include -I.
+LIB_PATH=/home/tools/jsoncpp-src-0.5.0/libs/linux-gcc-4.8.5
+INCLUDE= -I${ROOT_PATH}/mysql_lib/include -I/home/tools/jsoncpp-src-0.5.0/include/json -I.
 
 SER_BIN=server_main #gps_server
 
