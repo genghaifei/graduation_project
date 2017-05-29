@@ -83,12 +83,117 @@ void unimplement(int sock_client)
 	}
 }
 
-
-void tcp_server::execute_get(char *url,std::string &para)
+void tcp_server::execute_post(char *url,std::string &para = "NONE")
 {
-    ;
+
 }
 
+
+void tcp_server::execute_get(char *url,std::string &para = "NONE")
+{
+    Json::Reader reader;
+    Json::Value value;
+    cli cli;
+    int input_pipe[2] = {0,0};
+    int output_pipe[2] = {0,0};
+    int numbers = 0;
+    int status  = 0;
+    reader.parse(para,value);
+    std::string device = Value["device"].asString();
+    std::string function = Value["function"].asString();
+    if (device.compare("cli") == 0)
+    {
+        if (function.compare("get_gps_information") == 0)
+        {
+            LOCATION loc.GPS_number = Value["GPS_number"].asString();
+            cli.get_gps_information(loc,loc.GPS_number);
+            Json::Value root;
+            root["GPS_number"] = loc.GPS_number;
+            root["Lng"] = loc.Lng;
+            root["Lat"] = loc.Lat;
+            root["Time"] = loc.Time;
+            std::string out = root.toStyledString();
+            send_file(out);
+        }
+        if (function.compare("get_car_information") == 0)
+        {
+           CAR car;
+           car.ID = Value["ID"].asString();
+           cli.get_car_information(car,car.ID);
+           Json::Value root;
+           root["ID"] = car.ID;
+           root["GSP_number"] = car.GPS_number;
+           root["Car_brand"] = car.Car_brand;
+           root["Car_number"] = car.Car_number;
+           root["Car_VIN_number"] = car.Car_VIN_number;
+           root["Car_type"] = car.Car_type;
+           root["Car_buy_time"] = car.Car_buy_time;
+           root["Car_color"] = car.Car_color;
+           std::string out = root.toStyledString();
+           send_file(out);
+        }
+        if (function.compare("get_person_information") == 0)
+        {
+            PERSON per;
+            per.ID = Value["ID"].asString();
+            cli.get_person_information(per,per.ID);
+            Json::Value root;
+            root["ID"] = per.ID;
+            root["Name"] = per.Name;
+            root["Sex"] = per.Sex;
+            root["Address"] = per.Address;
+            root["Tel"] = per.Tel;
+            root["E_mail"] = per.E_mail;
+            root["Client_id"] = per.Client_id;
+            std::string out = root.toStyledString();
+            send_file(out);
+        }
+        if (function.compare("test_in_information") == 0)
+        {
+            COUNT cou;
+            Json::Value root;
+            cou.ID = Value["ID"].asString();
+            cou.passwd = Value["passwd"].asString();
+            if (cli.test_sign_in_information(cou))
+            {
+                root["status"] = "Yes";
+            }
+            else
+            {
+                root["status"] = "NO";
+            }
+            std::string out = root.toStyledString();
+            send_file(out);
+        }
+    }
+    if (device.compare("pli") == 0)
+    {
+        if (function.compare("get_gps_information") == 0)
+        {}
+        if (function.compare("get_car_information") == 0)
+        {}
+        if (function.compare("get_person_information") == 0)
+        {}
+        if (function.compare("test_in_information") == 0)
+        {}
+    }
+	char head[BUFFER_SIZE];
+	bzero(head,sizeof(head));
+}
+
+int tcp_server::send_file(const std::string &buf)
+{
+    char head[BUFFER_SIZE];
+    bzero(head,sizeof(head));
+	strcat(head,"HTTP/1.0 200 OK \r\n\r\n");
+	int ret = send(sock_client,head,strlen(head),0);
+	ret = send(sock_client,buf.c_str(),strlen(buf.c_str()),0);
+}
+
+void tcp_server::execute_post()
+{
+
+}
 
 void tcp_server::accept_request()
 {

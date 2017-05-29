@@ -1,5 +1,6 @@
 #include <iostream>
-#include <stdint.h> //uint64_t  
+#include <stdint.h> //uint64_t 
+#include "json.h"
 typedef uint64_t hash_t;  //uint64_t == unsigned long long
 
 constexpr hash_t prime = 0x1000000001B3ull;   //ull == unsigned long long 
