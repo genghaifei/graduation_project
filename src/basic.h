@@ -42,7 +42,7 @@ struct COUNT
 struct WORN
 {
     std::string GPS_number;
-    std::string Warning;
+    std::string Worning;
     std::string Lng;
     std::string Lat;
 };
@@ -62,6 +62,8 @@ struct LIST_IN
     WORN worn;
     LOCATION loc;
 };
+
+#define BUFFER_SIZE 1024
 
 const std::string _host("");
 const std::string _usr("");
