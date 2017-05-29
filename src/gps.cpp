@@ -1,24 +1,24 @@
 #include "gps.h"
 gps::gps(int _number)
 {
-	conn = get_connector();
+    handle.begin_connect();
+    handle.sql_init();
 }
 
 gps::~gps()
 {}
 
-int gps::get_gps_information(Loc_m& loc)
+bool gps::get_gps_information(Loc_m& loc)
 {
-	std::string time = get_time();
-	std::string sql = "select loc_time from gps where gps_number="+loc.GPS_number+""
+	std::string sql = "select loc_time from gps where gps_number="+loc.GPS_number+"";
 	handle.sql_select(sql);
-    while(sql_handle.resultSet->next())
+    while(handle.resultSet->next())
     {
         try
         {
-            loc.Lng = sql_handle.resultSet->getString(2);
-            loc.Lat = sql_handle.resultSet->getString(3);
-            loc.Time = sql_handle.resultSet->getString(4);
+            loc.Lng = handle.resultSet->getString(2);
+            loc.Lat = handle.resultSet->getString(3);
+            loc.Time = handle.resultSet->getString(4);
         }
         catch (std::exception e)
         {
@@ -26,22 +26,22 @@ int gps::get_gps_information(Loc_m& loc)
         }
     }
 	
-	return 0;//return error message
+	return true;//return error message
 }
 
 int gps::get_gps_orbit_information(Loc_m* loc, std::string begin_time,std::string end_time)
 {
 	std::string sql = "select loc_time form gps where ~~(time duration)";
 }
-int gps::get_worning_information(const Loc_m &loc ,std::string& worning_message)
+int gps::get_worning_information(WORN &worn)
 {
-	std::string sql = "select worning form woring_message where gps_number="+loc.GPS_number+"";
-    sql_handle.sql_select(sql);
-    while (sql_handle.resultSet->next())
+	std::string sql = "select worning form woring_message where gps_number="+worn.GPS_number+"";
+    handle.sql_select(sql);
+    while (handle.resultSet->next())
     {
         try
         {
-            loc.Worning = sql_hanle.resultSet->getString(1);
+            worn.Worning = handle.resultSet->getString(1);
         }
         catch (std::exception e)
         {

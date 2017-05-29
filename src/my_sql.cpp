@@ -1,6 +1,6 @@
 #include "my_sql.h"
 
-sql_connector::sql_connector
+sql_connector::sql_connector()
 {
     driver = NULL;
     conn = NULL;
@@ -8,7 +8,7 @@ sql_connector::sql_connector
     resultSet = NULL;
     prep_stmt = NULL;
 }
-sql_connector::~sql_connector
+sql_connector::~sql_connector()
 {
     close_connect();
 }
@@ -32,7 +32,7 @@ int sql_connector::begin_connect()
 
 int sql_connector::sql_init() 
 {
-    stmt = con->creatStatement();
+    stmt = conn->createStatement();
     if (stmt == NULL)
     {
         std::cout<<"stmt is NULL" <<std::endl;
@@ -44,14 +44,14 @@ int sql_connector::sql_init()
 
 int sql_connector::sql_select(const std::string &sql)
 {
-    char* str_sql = sql.c_str();
+    const char* str_sql = sql.c_str();
     resultSet = stmt->executeQuery(str_sql);
 }
 
 int sql_connector::sql_insert(const std::string &sql)
 {
-    char* str_sql = sql.c_str();
-    prep_stmt = con->prepareStatement(str_sql);
+    const  char* str_sql = sql.c_str();
+    prep_stmt = conn->prepareStatement(str_sql);
     //(insert into city () VALUES ());
     //prep_stmt->setString(1,"London,UK");
     //int updatecount = 0;

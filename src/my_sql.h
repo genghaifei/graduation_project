@@ -20,7 +20,7 @@ class sql_connector
         int sql_select(const std::string &);
         int sql_insert(const std::string &);
         int begin_connect();
-        int  close_connect();
+        void close_connect();
         sql::ResultSet *resultSet;
     private:
         sql::mysql::MySQL_Driver *driver;
