@@ -32,6 +32,17 @@ struct CAR
     std::string Car_type;
     std::string Car_buy_time;
     std::string Car_color;
+    std::string Status;
+};
+
+struct POLICEMAN
+{
+    std::string Name;
+    std::string Number;
+    std::string Sex;
+    std::string Age;
+    std::string Location;//the police office location
+    std::string Tel;
 };
 
 struct COUNT

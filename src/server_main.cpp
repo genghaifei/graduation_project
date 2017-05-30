@@ -200,10 +200,58 @@ void tcp_server::execute_post(char *url,std::string &para = "NONE")
             list.person.ID = Value["ID"].asString();
             cli.comfirm_worning_information(list);
         }
-
+        if (function.compare("remove_worning_information") == 0)
+        {
+            Car car;
+            car.ID = Value["Car_ID"].asString();
+            car.Car_number = Value["Car_number"].asString();
+            car.Status = Value["Status"].asString();
+            cli.remove_worning_information();
+        }
     }
     if (device.compare("pli") == 0)
-    {}
+    {
+        pli pli;
+        if (function.compare("set_pli_per_information") == 0)
+        {
+            POLICEMAN pli_man;
+            pli_man.Name = Value["Name"].asString();
+            pli_man.Number = Value["Number"].asString();
+            pli_man.Sex = Value["Sex"].asString();
+            pli_man.Age = Value["Age"].asString();
+            pli_man.Location = Value["Location"].asString();
+            pli_man.Tel = Value["Tel"].asString();
+            pli.ser_pli_per_information(pli_man);
+        }
+        if (function.compare("begin_dealWith_worning_information") == 0)
+        {
+            POLICEMAN pli_man;
+            CAR car;
+            PERSON per;
+            pli_man.Name = Value["Name"].asString();
+            pli_man.Number = Value["Number"].asString();
+            pli_man.Sex = Value["Sex"].asString();
+            pli_man.Age = Value["Age"].asString();
+            pli_man.Location = Value["Location"].asString();
+            pli_man.Tel = Value["Tel"].asString();
+            car.status = Value["status"].asString();
+            car.Number = Value["Car_number"].asString();
+            per.ID = Value["ID"].asString();
+            pli.begin_dealWith_worning_information(pli_man,car,per);
+        }
+        if (function.compare("end_dealWith_worning_information") == 0)
+        {
+            CAR car;
+            PERSON per;
+            car.number = Value["Number"].asString();
+            per.ID = Value["ID"].asString();
+            pli.end_dealWith_worning_information(car,per);
+            Json::Value root;
+            //root["message"] = "Car is found,please call the plice man tel number";
+            //std::string out = root.toStyledString();
+           // send_file(out);//push message
+        }
+    }
 
 
 }
