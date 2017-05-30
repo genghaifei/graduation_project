@@ -159,7 +159,7 @@ void tcp_server::execute_post(char *url,std::string &para = "NONE")
             per.Client_id = Value["Client_id"].asString();
             cli.set_person_information(per);
         }
-        if (function.compare("ser_car_information") == 0)
+        if (function.compare("set_car_information") == 0)
         {
             CAR car;
             car.ID = Value["ID"].asString();
@@ -212,7 +212,7 @@ void tcp_server::execute_post(char *url,std::string &para = "NONE")
     if (device.compare("pli") == 0)
     {
         pli pli;
-        if (function.compare("set_pli_per_information") == 0)
+        if (function.compare("register_pli_information") == 0)
         {
             POLICEMAN pli_man;
             pli_man.Name = Value["Name"].asString();
@@ -221,7 +221,7 @@ void tcp_server::execute_post(char *url,std::string &para = "NONE")
             pli_man.Age = Value["Age"].asString();
             pli_man.Location = Value["Location"].asString();
             pli_man.Tel = Value["Tel"].asString();
-            pli.ser_pli_per_information(pli_man);
+            pli.register_pli_information(pli_man);
         }
         if (function.compare("begin_dealWith_worning_information") == 0)
         {
@@ -250,6 +250,13 @@ void tcp_server::execute_post(char *url,std::string &para = "NONE")
             //root["message"] = "Car is found,please call the plice man tel number";
             //std::string out = root.toStyledString();
            // send_file(out);//push message
+        }
+        if (function.compare("test_sign_in_information"))
+        {
+            COUNT cou;
+            cou.ID = Value["ID"].asString();
+            cou.passwd = Value["passwd"].asString();
+            pli.test_sign_in_information(cou);
         }
     }
 
@@ -339,8 +346,6 @@ void tcp_server::execute_get(char *url,std::string &para = "NONE")
         if (function.compare("get_car_information") == 0)
         {}
         if (function.compare("get_person_information") == 0)
-        {}
-        if (function.compare("test_in_information") == 0)
         {}
     }
 	char head[BUFFER_SIZE];

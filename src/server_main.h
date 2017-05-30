@@ -7,6 +7,7 @@
 #include <string.h>
 #include <string>
 #include <map>
+#include <pthread.h>
 #include <arpa/inet.h>
 
 

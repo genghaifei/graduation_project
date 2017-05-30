@@ -35,7 +35,7 @@ int gps::get_gps_orbit_information(Loc_m* loc, std::string begin_time,std::strin
 }
 int gps::get_worning_information(WORN &worn)
 {
-	std::string sql = "select worning form woring_message where gps_number="+worn.GPS_number+"";
+	std::string sql = "select worning form woring_message where gps_number="+worn.loc.GPS_number+"";
     handle.sql_select(sql);
     while (handle.resultSet->next())
     {

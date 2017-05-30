@@ -122,9 +122,9 @@ bool cli::test_sign_in_information(const COUNT &count)
 
 void cli::display_worning_information(CAR &car, const WORN &worn)//gps function call ,take all the gps information
 {
-    std::string sql = "select * form Car_message where GPS_number='"+worn.GPS_number+"'";
+    std::string sql = "select * form Car_message where GPS_number='"+worn.loc.GPS_number+"'";
     sql_handle.sql_select(sql);
-    car.GPS_number = worn.GPS_number;
+    car.GPS_number = worn.loc.GPS_number;
     while(sql_handle.resultSet->next())
     {
         try{

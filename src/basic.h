@@ -1,6 +1,6 @@
 #include <iostream>
 #include <stdint.h> //uint64_t 
-#include "json.h"
+#include "json/json.h"
 typedef uint64_t hash_t;  //uint64_t == unsigned long long
 
 constexpr hash_t prime = 0x1000000001B3ull;   //ull == unsigned long long 
@@ -10,6 +10,14 @@ hash_t hash_(char const* str);
 constexpr hash_t hash_compile_time(char const* str,hash_t last_value);
 
 constexpr unsigned long long operator "" _hash(char const* p,size_t);
+
+enum CAR_STATUS
+{
+    NOMAL,
+    LOST,
+    FOUNDING,
+    FOUND,
+};
 
 struct PERSON
 {
@@ -50,6 +58,8 @@ struct COUNT
     std::string ID;
     std::string passwd;
 };
+
+
 
 struct LOCATION
 {
