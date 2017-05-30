@@ -53,11 +53,13 @@ int gps::get_worning_information(WORN &worn)
 
 bool gps::set_gps_information(Loc_m &loc)
 {
-
+    
 }
 
 bool gps::set_worning_information(Loc_m &loc)
-{}
+{
+    // push the worning  message to the platform;
+}
 
 bool gps::call_client_worning_message()
 {}

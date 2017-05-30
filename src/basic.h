@@ -40,20 +40,18 @@ struct COUNT
     std::string passwd;
 };
 
-struct WORN
-{
-    std::string GPS_number;
-    std::string Worning;
-    std::string Lng;
-    std::string Lat;
-};
-
 struct LOCATION
 {
     std::string GPS_number;
     std::string Lng;
     std::string Lat;
     std::string Time;
+};
+
+struct WORN
+{
+    LOCATION loc;
+    std::string Worning;
 };
 
 struct LIST_IN

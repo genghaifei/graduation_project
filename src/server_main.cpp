@@ -85,6 +85,126 @@ void unimplement(int sock_client)
 
 void tcp_server::execute_post(char *url,std::string &para = "NONE")
 {
+    int content_length = -1;
+    int numbers = 0;
+    char buf[BUFFER_SIZE];
+    //char *length
+    char c;
+    int status = 0;
+    do{
+        number = get_line(sock_client,buf,sizeof(buf));
+        buf[15] = '\0';
+        //length = &(buf[16]);
+        //
+        if (strncasecmp(buf,"Content-Length:",15) == 0)
+        {
+            content_length = atoi(&(buf[16]));
+        }
+    }while(strcmp("\n") && numbers > 0);
+    if (content_length == -1)
+    {
+        bad_request(sock_client);
+        return ;
+    }
+    bzero(buf,sizeof(buf));
+	sprintf(buf,"HTTP/1.0 200 OK\r\n\r\n");//this is the key \r\n
+	send(sock_client,buf,strlen(buf),0);
+    std::string json;
+    int i = 0;
+    for (;i<length_length;i++) 
+    {
+        recv(sock_client,&(json[i]),1,0)
+    }
+    Json::Reader reader;
+    Json::Value value;
+    reader.parse(json,value);
+    std::string device = Value["device"].asString();
+    std::string function = Value["function"].asString();
+    if (device.compare("gps") == 0)
+    {
+        gps gps;
+        if (function.compare("set_gps_information") == 0)
+        {
+            LOCATION loc;
+            loc.GPS_number = Value["GPS_number"].asString();
+            loc.Lng = Value["Lng"].asString();
+            loc.Lat = Value["Lat"].asString();
+            loc.Time = Value["Time"].asString();
+            gps.set_gps_information(loc);
+            //get the information from cli and store it,  needn't give a response,   
+        }
+        if (function.compare("set_worning_information") == 0)
+        {
+            WORN worn;
+            worn.loc.GPS_NUMBER = Value["GPS_number"].asString();
+            worn.loc.Lng = Value["Lng"].asString();
+            worn.loc.Lat = Value["Lat"].asString();
+            worn.loc.Time = Value["Time"].asString();
+            worn.Worning = Value["Worning"].asString();
+            gps.set_worning_information(worn);
+        }
+    }
+    if (device.compare("cli") == 0)
+    {
+        cli cli;
+        if (function.compare("set_person_information") == 0)
+        {
+            PERSON per;
+            per.Name = Value["Name"].asString();
+            per.ID = Value["ID"].asString();
+            per.Sex = Value["Sex"].asString();
+            per.Address = Value["Address"].asString();
+            per.Tel = Value["Tel"].asString();
+            per.E_mail = Value["E_mail"].asString();
+            per.Client_id = Value["Client_id"].asString();
+            cli.set_person_information(per);
+        }
+        if (function.compare("ser_car_information") == 0)
+        {
+            CAR car;
+            car.ID = Value["ID"].asString();
+            car.GPS_number = Value["GPS_number"].asString();
+            car.Car_brand = Value["Car_brand"].asString();
+            car.Car_number = Value["Car_number"].asString();
+            car.Car_VIN_number = Value["Car_VIN_number"].asString();
+            car.Car_type = Value["Car_type"].asString();
+            car.Car_buy_time = Value["Car_buy_time"].asString();
+            car.Car_color = Value["Car_color"].asString();
+            cli.set_car_information();
+        }
+        if (function.compare("test_in_information") == 0)
+        {
+            COUNT cou;
+            cou.ID = Value["ID"].asString();
+            cou.passwd = Value["passwd"].asString();
+            Json::Value root;
+            if (cli.test_sign_in_information(cou))
+            {
+                root["status"] = "YES";
+                std::string out = root.toStyledString();
+	            send(sock_client,out.c_str(),strlen(out.c_str()),0);
+            }
+            else
+            {
+                root["status"] = "NO";
+                std::string out = root.toStyledString();
+	            send(sock_client,out.c_str(),strlen(out.c_str()),0);
+            }
+
+        }
+        if (function.compare("comfirm_worning_information") == 0)
+        {
+            LIST_IN list;
+            list.car.Car_number = Value["Car_number"].asString();
+            list.car.GPS_number = Value["GPS_number"].asString();
+            list.person.ID = Value["ID"].asString();
+            cli.comfirm_worning_information(list);
+        }
+
+    }
+    if (device.compare("pli") == 0)
+    {}
+
 
 }
 
@@ -94,8 +214,6 @@ void tcp_server::execute_get(char *url,std::string &para = "NONE")
     Json::Reader reader;
     Json::Value value;
     cli cli;
-    int input_pipe[2] = {0,0};
-    int output_pipe[2] = {0,0};
     int numbers = 0;
     int status  = 0;
     reader.parse(para,value);
