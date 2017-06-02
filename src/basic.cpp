@@ -17,6 +17,22 @@ constexpr hash_t hash_compile_time(char const* str, hash_t last_value = basis)
     return *str ? hash_compile_time(str+1,(*str ^ last_value) * prime) : last_value ;
 }
 
+void print_log(const std::string &message)
+{
+    int fd = open("/home/log_file",O_RDWR);
+    if (fd  == -1)
+    {
+        perror("open error");
+        return;
+    }
+    int numbers = write(fd,message.c_str(),strlen(message.c_str()));
+    if (numbers == -1)
+    {
+        perror("write error");
+        return ;
+    }
+}
+
 constexpr unsigned long long operator "" _hash(char const* p,size_t)
 {
     return hash_compile_time(p);

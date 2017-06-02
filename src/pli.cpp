@@ -32,17 +32,18 @@ bool pli::test_sign_in_information(const COUNT &cou)
             std::cout<<e.what();
         }
     }
-    Json::Value root;
     if (passwd.compare(cou.passwd) == 0)
     {
-        root["status"] = "YES";
+       // root["status"] = "YES";
+        return true;
     }
     else
     {
-        root["status"] = "NO";
+        return false;
+       // root["status"] = "NO";
     }
-    std::string out = root.toStyledString();
-    send(sock_client,out.c_str(),strlen(out.c_str()),0);
+   // std::string out = root.toStyledString();
+   // send(sock_client,out.c_str(),strlen(out.c_str()),0);
 }
 
 int pli::get_gps_information()
@@ -59,7 +60,7 @@ int pli::get_worning_information()
 
 int pli::begin_dealWith_worning_information(POLICEMAN &police,CAR &car,PERSON &per)
 {
-    std::string sql = "select * from POLICEMAN_message where Number="+police.number+"";
+    std::string sql = "select * from POLICEMAN_message where Number="+police.Number+"";
     sql_handle.sql_select(sql);
     while(sql_handle.resultSet->next())
     {
@@ -77,7 +78,7 @@ int pli::begin_dealWith_worning_information(POLICEMAN &police,CAR &car,PERSON &p
             std::cout<<e.what();
         }
     }
-    car.status = "FOUNDING";
+    car.Status = "FOUNDING";
     //push 
     //car number person ID  police man information
 }

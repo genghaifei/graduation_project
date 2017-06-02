@@ -24,7 +24,6 @@ int tcp_server::init()
     if (this->listen_sock == -1)
     {
         print_log("create socket failed");
-        print_log("errno is %d,error is %s",errno,strerror(errno));
         go_down(errno,strerror(errno));
     }
     print_log("create socket success! \n");
@@ -40,12 +39,11 @@ int tcp_server::init()
     if (bind_ret == -1)
     {
         print_log("bind socker failed!");
-        print_log("errno is %d error is %s",errno ,strerror(errno));
         go_down(errno,strerror(errno));
     }
 }
 
-int get_line(int sockfd,char buf[],int buf_size)
+int tcp_server::get_line(char buf[],int buf_size)
 {
 	char c = '\0';
 	int n = 0;
@@ -74,16 +72,16 @@ int get_line(int sockfd,char buf[],int buf_size)
 	return i;
 }
 
-void unimplement(int sock_client)
+void tcp_server::unimplement()
 {
 	char* buf = "not define action";
 	if (send(sock_client,buf,sizeof(buf),0) == sizeof(buf))
 	{
-		syslog(LOG_DEBUG,"unimplement success");
+		print_log("unimplement success");
 	}
 }
 
-void tcp_server::execute_post(char *url,std::string &para = "NONE")
+void tcp_server::execute_post(char *url,std::string para = "NONE")
 {
     int content_length = -1;
     int numbers = 0;
@@ -203,7 +201,7 @@ void tcp_server::execute_post(char *url,std::string &para = "NONE")
         if (function.compare("remove_worning_information") == 0)
         {
             Car car;
-            car.ID = Value["Car_ID"].asString();
+            car.ID = Value["ID"].asString();
             car.Car_number = Value["Car_number"].asString();
             car.Status = Value["Status"].asString();
             cli.remove_worning_information();
@@ -321,7 +319,7 @@ void tcp_server::execute_get(char *url,std::string &para = "NONE")
             std::string out = root.toStyledString();
             send_file(out);
         }
-        if (function.compare("test_in_information") == 0)
+/*        if (function.compare("test_in_information") == 0)
         {
             COUNT cou;
             Json::Value root;
@@ -337,7 +335,7 @@ void tcp_server::execute_get(char *url,std::string &para = "NONE")
             }
             std::string out = root.toStyledString();
             send_file(out);
-        }
+        }*/
     }
     if (device.compare("pli") == 0)
     {
@@ -361,14 +359,11 @@ int tcp_server::send_file(const std::string &buf)
 	ret = send(sock_client,buf.c_str(),strlen(buf.c_str()),0);
 }
 
-void tcp_server::execute_post()
-{
 
-}
-
-void tcp_server::accept_request()
-{
-    sock_listen = listen_sock
+void* accept_request(void *tmp)
+{   
+    tcp_server tcp = *(tcp_server*)tmp;
+    sock_listen = tcp->listen_sock;
 	int cgi = 0;
 	char buf[BUFFER_SIZE];
 	char *query_string;
@@ -421,7 +416,7 @@ void tcp_server::accept_request()
         }
         if (*query_string == '\0')
         {
-            execute_cgi(url);
+            tcp.execute_cgi(url);
         }
         int pos = 0;
         std::string para;
@@ -430,12 +425,12 @@ void tcp_server::accept_request()
             para[pos++] = *(parameter++);
         }
 
-		execute_get(url,para);
+		tcp.execute_get(url,para);
 	}
     if ( !strcasecmp(method,"POST"))
     {
         query_string = url;
-        while(*query_string != '\0' && query_string != '?')
+        while(*query_string != '\0' && *query_string != '?')
         {
             query_string++;
         }
@@ -446,7 +441,7 @@ void tcp_server::accept_request()
         }
         if (*query_string == '\0')
         {
-            execute_post(url);
+            tcp.execute_post(url);
         }
         int pos = 0;
         std::string para;
@@ -454,200 +449,20 @@ void tcp_server::accept_request()
         {
             para[pos++] = *(parameter++);
         }
-        execute_post(url,para);
+        tcp.execute_post(url,para);
 
     }
     close(sock_client);
-/*	if ( !strcasecmp(method,"POST"))
-	{
-		cgi = 1;
-	}
-
-	sprintf(path,"htdocs%s",url);
-	if (path[strlen(path)-1] == '/')
-	{//if the path is a dir then return the static file
-		strcat(path,"index.html");
-	}
-
-	if (stat(path,&st) == -1)
-	{
-		while ((numbers >0) && strcmp("\n",buf))
-		{
-			numbers = get_line(sock_client,buf,sizeof(buf));//this line is throwed the head information
-		}
-		not_found(sock_client);
-	}
-	else
-	{
-		if ((st.st_mode & S_IFMT) == S_IFDIR)//the path is a dir or a file
-		{
-			strcat(path,"index.html");
-		}
-		if ((st.st_mode & S_IXUSR) || (st.st_mode & S_IXGRP) || (st.st_mode & S_IXOTH))
-		{
-			cgi = 1;
-		}*/
-
-/*		if (cgi == 0)
-		{
-			send_file(sock_client,path,st.st_size);
-			reset_oneshot(epollfd,sock_client);
-			syslog(LOG_DEBUG,"accept_request success send a html");
-			close(sock_client);
-		}
-		else
-		{
-			int ret;
-			pthread_t new_thread;
-			struct arg arg;
-			arg.a_fd.listen_sock = sock_client;
-			arg.a_fd.epollfd = epollfd;
-			arg.path = path;
-			arg.method = method;
-			arg.query_string = query_string;
-			ret = pthread_create(&new_thread,NULL,&execute_cgi,(void *)&arg);
-		//	reset_oneshot(epollfd,sock_client);
-			//execute_cgi(sock_client,path,method,query_string);
-			syslog(LOG_DEBUG,"accept_request,success exec cgi program");
-		}
-
-	}	*/
-//	reset_oneshot(epollfd,sock_client);
-//	close(sock_client);
 }
-void accept_cli(int sockfd)
-{
-    char space;
-    char line[3];
-    int flag = recv(sockfd,&space,1,NULL);
-    if (flag == -1)
-    {
-        return;
-    }
-    flag = recv(sockfd,line,3,NULL);
-    if (flag == -1)
-    {
-        return;
-    }
-    switch(hash_(line))
-    {
-        case "get_gps"_hash://get the gps information
-            {
-                //get the record from gps  so we should call the connect gps interface
-            }
-        case "get_gpd"_hash://get the orbit gps information
-            {
-                //get the gps record from database 
-            }
-        case "get_pID"_hash://get the person ID information
-	        {
-		
-	        }
-        case "get_car"_hash:
-            {
-
-            }
-        case "reg_per"_hash:
-            {
-
-            }
-        case "reg_car"_hash:
-            {
-
-            }
-        case "test_in"_hash:
-            {
-
-            }
-        case "dis_wor"_hash:
-            {
-                
-            }
-        case "con_wor"_hash:
-            {
-
-            }
-        
-    }
-        
-}
-
-void accept_pli(int sockfd)
-{
-    char space;
-    char line[3];
-    int flag = recv(sockfd,&space,1,NULL);
-    if (flag == -1)
-    {
-        return;
-    }
-    flag = recv(sockfd,line,3,NULL);
-    if (flag == -1)
-    {
-        return;
-    }
-    switch(hash_(line))
-    {
-        case ""
-    }
-
-}
-
-void accept_gps(int sockfd)
-{
-    char space;
-    char line[3];
-    int flag = recv(sockfd,&space,1,NULL);
-
-}
-
-void exec(void* arg)
-{
-    int sockfd = (args)arg->sockfd;
-    char line[3];
-    int flag = recv(sockfd,line,3,NULL);//maybe the gps return number is two double number ,so we need to deal it spiceal.
-    if (flag == -1)
-    {
-        return;
-    }
-    switch(hash_(line))
-    {
-        case "cli"_hash:
-            {
-                accept_cli(sockfd);
-                break;
-            }
-
-        case "pli"_hash:
-            {
-                accept_pli(sockfd);
-                break;
-            }
-        case "gps"_hash:
-            {
-                accept_gps(sockfd);///
-                break;
-            }
-        default :
-            {
-                print_log("get client wrong");
-            }
-    }
-
-
-}
-
-
 
 int main()
 {
     tcp_server tcp;
     tcp.init();
-    listen_ret = listen(tcp.listen_sock,5);
+    int  listen_ret = listen(tcp.listen_sock,5);
     if ( listen_ret == -1 )
     {
         print_log("listen sock failed!");
-        print_log("errno is %d ,error is %s",errno,strerror(errno));
     }
     print_log("listen sock success");
 
@@ -657,18 +472,17 @@ int main()
 
     while(true)
     {
-        int sockfd = accept(tcp.listen_sock,(struct sockaddr *)&local_address,client_addr_len);
+        int sockfd = accept(tcp.listen_sock,(struct sockaddr *)&local_address,&client_addr_len);
         if (sockfd == -1)
         {
             print_log("accept socket failed");
-            print_log("errno is %d,error is %s",errno,strerror(errno));
         }
-        print_log("accpet socked success!")
+        print_log("accpet socked success!");
 
         pthread_t new_client;
         args arg;
-        arg.sockfd = sockfd
-        int ret = pthread_create(&accept_request,NULL,&exec,NULL,*arg); 
+        arg.sockfd = sockfd;
+        int ret = pthread_create(&new_client,NULL,&accept_request,(void*)&tcp); 
 
     }
         

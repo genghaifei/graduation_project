@@ -1,5 +1,10 @@
 #include <iostream>
-#include <stdint.h> //uint64_t 
+#include <stdint.h> //uint64_t
+#include <unistd.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include "json/json.h"
 typedef uint64_t hash_t;  //uint64_t == unsigned long long
 
@@ -10,6 +15,8 @@ hash_t hash_(char const* str);
 constexpr hash_t hash_compile_time(char const* str,hash_t last_value);
 
 constexpr unsigned long long operator "" _hash(char const* p,size_t);
+
+void print_log(const std::string &);
 
 enum CAR_STATUS
 {
