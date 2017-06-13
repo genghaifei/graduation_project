@@ -10,6 +10,9 @@
 #include <pthread.h>
 #include <arpa/inet.h>
 #include "basic.h"
+#include "pli.h"
+#include "gps.h"
+#include "cli.h"
 
 
 class tcp_server
@@ -22,9 +25,10 @@ class tcp_server
         void* accept_request();
         void execute_post(char* ,std::string );
         void execute_get(char* ,std::string );
-    private:
-        int send_file(const std::string &);
+        void unimplement();
+        void bad_request();
         int get_line(char* ,int);
+        int send_file(const std::string &);
     public:
         int listen_sock;
         std::string _host_ip;

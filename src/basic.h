@@ -1,3 +1,5 @@
+#ifndef _BASIC_H
+#define _BASIC_H
 #include <iostream>
 #include <stdint.h> //uint64_t
 #include <unistd.h>
@@ -96,3 +98,4 @@ const std::string _host("");
 const std::string _usr("");
 const std::string _passwd("");
 const std::string _db("");
+#endif

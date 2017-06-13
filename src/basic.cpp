@@ -19,7 +19,7 @@ constexpr hash_t hash_compile_time(char const* str, hash_t last_value = basis)
 
 void print_log(const std::string &message)
 {
-    int fd = open("/home/log_file",O_RDWR);
+    int fd = open("/home/log_file",O_RDWR|O_CREAT,S_IRWXU);
     if (fd  == -1)
     {
         perror("open error");

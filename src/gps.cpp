@@ -1,14 +1,14 @@
 #include "gps.h"
-gps::gps(int _number)
+Gps::Gps()
 {
     handle.begin_connect();
     handle.sql_init();
 }
 
-gps::~gps()
+Gps::~Gps()
 {}
 
-bool gps::get_gps_information(Loc_m& loc)
+bool Gps::get_gps_information(Loc_m& loc)
 {
 	std::string sql = "select loc_time from gps where gps_number="+loc.GPS_number+"";
 	handle.sql_select(sql);
@@ -29,11 +29,11 @@ bool gps::get_gps_information(Loc_m& loc)
 	return true;//return error message
 }
 
-int gps::get_gps_orbit_information(Loc_m* loc, std::string begin_time,std::string end_time)
+int Gps::get_gps_orbit_information(Loc_m* loc, std::string begin_time,std::string end_time)
 {
 	std::string sql = "select loc_time form gps where ~~(time duration)";
 }
-int gps::get_worning_information(WORN &worn)
+int Gps::get_worning_information(WORN &worn)
 {
 	std::string sql = "select worning form woring_message where gps_number="+worn.loc.GPS_number+"";
     handle.sql_select(sql);
@@ -51,17 +51,17 @@ int gps::get_worning_information(WORN &worn)
 	return 0;
 }
 
-bool gps::set_gps_information(Loc_m &loc)
+bool Gps::set_gps_information(Loc_m &loc)
 {
     
 }
 
-bool gps::set_worning_information(Loc_m &loc)
+bool Gps::set_worning_information(WORN &worn)
 {
     // push the worning  message to the platform;
 }
 
-bool gps::call_client_worning_message()
+bool Gps::call_client_worning_message()
 {}
 
 

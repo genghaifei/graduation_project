@@ -1,3 +1,5 @@
+#ifndef _MY_SQL_H
+#define _MY_SQL_H
 #include <iostream>
 #include <typeinfo>
 #include "mysql_connection.h"
@@ -28,3 +30,4 @@ class sql_connector
         sql::Statement *stmt;
         sql::PreparedStatement *prep_stmt;
 };
+#endif

@@ -1,18 +1,18 @@
 #include "cli.h"
 
 
-cli::cli()
+Cli::Cli()
 {
     sql_handle.begin_connect();
     sql_handle.sql_init();
 }
 
-cli::~cli()
+Cli::~Cli()
 {
 
 }
 
-int cli::register_person_information(const PERSON &per)
+int Cli::register_person_information(const PERSON &per)
 {
     std::string sql = "insert into ID_message VALUES ('"+per.Name+"','"+per.ID+"','"+per.Sex+"','"+per.Address+"','"+per.Tel+"','"+per.E_mail+"','"+per.Client_id+"')";
     int ret = sql_handle.sql_insert(sql);
@@ -23,7 +23,7 @@ int cli::register_person_information(const PERSON &per)
     return 0;
 }
 
-int cli::register_car_information(const CAR &car)
+int Cli::register_car_information(const CAR &car)
 {
     std::string sql = "insert into Car_message VALUES ('"+car.ID+"','"+car.GPS_number+"','"+car.Car_brand+"','"+car.Car_number+"','"+car.Car_VIN_number+"','"+car.Car_type+"','"+car.Car_buy_time+"','"+car.Car_color+"')";
     int ret = sql_handle.sql_insert(sql);
@@ -34,7 +34,7 @@ int cli::register_car_information(const CAR &car)
     return 0;
 }
 
-void cli::get_gps_information(LOCATION &loc,const std::string &GPS_number)
+void Cli::get_gps_information(LOCATION &loc,const std::string &GPS_number)
 {
     std::string sql = "select * from Location_message where GPS_number='"+GPS_number+"'";
     sql_handle.sql_select(sql);
@@ -53,7 +53,7 @@ void cli::get_gps_information(LOCATION &loc,const std::string &GPS_number)
     }
 }
 
-void cli::get_person_information(PERSON &per,const std::string &ID)
+void Cli::get_person_information(PERSON &per,const std::string &ID)
 {
     std::string sql = "select * from ID_message where ID='"+ID+"'";
     sql_handle.sql_select(sql);
@@ -76,7 +76,7 @@ void cli::get_person_information(PERSON &per,const std::string &ID)
     }
 }
 
-void cli::get_car_information(CAR &car,const std::string &ID)
+void Cli::get_car_information(CAR &car,const std::string &ID)
 {
     std::string sql = "select * from Car_message where ID='"+ID+"'";
     sql_handle.sql_select(sql);
@@ -99,7 +99,7 @@ void cli::get_car_information(CAR &car,const std::string &ID)
     }
 }
 
-bool cli::test_sign_in_information(const COUNT &count)
+bool Cli::test_sign_in_information(const COUNT &count)
 {
     std::string sql = "select passwd from ID_message where ID='"+count.ID+"'";
     sql_handle.sql_select(sql);
@@ -120,7 +120,7 @@ bool cli::test_sign_in_information(const COUNT &count)
     return false;
 }
 
-void cli::display_worning_information(CAR &car, const WORN &worn)//gps function call ,take all the gps information
+void Cli::display_worning_information(CAR &car, const WORN &worn)//gps function call ,take all the gps information
 {
     std::string sql = "select * form Car_message where GPS_number='"+worn.loc.GPS_number+"'";
     sql_handle.sql_select(sql);
@@ -145,36 +145,24 @@ void cli::display_worning_information(CAR &car, const WORN &worn)//gps function 
     //how to do it   how to solove it 
 }
 
-void cli::confirm_worning_information()
+void Cli::confirm_worning_information()
 {
 }
 
-void cli::set_gps_information(const LOCATION &loc)
+void Cli::set_gps_information(const LOCATION &loc)
 {
     std::string sql = "insert into Location_message values ('"+loc.GPS_number+"','"+loc.Lng+"','"+loc.Lat+"','"+loc.Time+"')";
     sql_handle.sql_insert(sql);
 }
 
-void cli::set_car_information(const CAR &car)
+void Cli::set_car_information(const CAR &car)
 {
     std::string sql = "insert into Car_message values ('"+car.ID+"','"+car.GPS_number+"','"+car.Car_brand+"','"+car.Car_number+"','"+car.Car_VIN_number+"','"+car.Car_type+"','"+car.Car_buy_time+"','"+car.Car_color+"')";
     sql_handle.sql_insert(sql);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-/* vim: set expandtab ts=4 sw=4 sts=4 tw=100: */
-
-
+void Cli::remove_worning_information()
+{}
 
 
 

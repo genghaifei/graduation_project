@@ -1,11 +1,13 @@
+#ifndef _PLI_H
+#define _PLI_H
 #include "basic.h"
 #include "my_sql.h"
 
-class pli
+class Pli
 {
     public:
-        pli();
-        ~pli();
+        Pli();
+        ~Pli();
     public:
         int register_pli_information(const POLICEMAN &);
         bool test_sign_in_information(const COUNT &);
@@ -19,3 +21,4 @@ class pli
         sql_connector sql_handle;
         int pli_id;
 };
+#endif

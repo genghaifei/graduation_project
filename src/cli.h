@@ -9,11 +9,11 @@
 #include <vector>
 
 
-class cli
+class Cli
 {
     public:
-        cli();
-        ~cli();
+        Cli();
+        ~Cli();
     public:
         int register_person_information(const PERSON &);
         int register_car_information(const CAR &);
@@ -24,6 +24,7 @@ class cli
         bool test_sign_in_information(const COUNT &count);//sign in test
         void display_worning_information(CAR &,const WORN &);
         void confirm_worning_information();
+        void remove_worning_information();
     private:
        // void get_database_connector();construction function write
         void set_gps_information(const LOCATION &);
