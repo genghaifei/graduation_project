@@ -19,7 +19,7 @@ constexpr hash_t hash_compile_time(char const* str, hash_t last_value = basis)
 
 void print_log(const std::string &message)
 {
-    int fd = open("/home/log_file",O_RDWR|O_CREAT,S_IRWXU);
+    int fd = open("/home/graduation_project/src/log_file",O_RDWR|O_CREAT| O_APPEND,S_IRWXU);
     if (fd  == -1)
     {
         perror("open error");
@@ -31,6 +31,7 @@ void print_log(const std::string &message)
         perror("write error");
         return ;
     }
+    close(fd);
 }
 
 constexpr unsigned long long operator "" _hash(char const* p,size_t)

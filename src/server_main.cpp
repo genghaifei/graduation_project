@@ -27,7 +27,7 @@ int tcp_server::init()
     bzero(&local_address,sizeof(local_address));
     local_address.sin_family = AF_INET;
     local_address.sin_port = htons(this->_host_port);
-    local_address.sin_addr.s_addr = inet_addr(this->_host_ip.c_str());
+    local_address.sin_addr.s_addr = inet_addr(INADDR_ANY);
 
     socklen_t len = sizeof(struct sockaddr_in);
     int bind_ret = bind(listen_sock,(sockaddr *)&local_address,len);
@@ -364,6 +364,7 @@ int tcp_server::send_file(const std::string &buf)
 void* accept_request(void *tmp)
 {   
     //typedef (int *)tmp tcp;
+    print_log("enter accept_request \n");
     tcp_server* tcp=(tcp_server*)tmp;
     int sock_client = tcp->listen_sock;
 	int cgi = 0;
@@ -381,6 +382,8 @@ void* accept_request(void *tmp)
 //	struct stat st;
 	
     numbers = tcp->get_line(buf,sizeof(buf));
+    //////////////////////////////////////
+    std::cout<<buf<<std::endl;
 	while ( !isspace(buf[i]) && (j < sizeof(method) - 1))
 	{
 
@@ -477,10 +480,10 @@ int main()
         int sockfd = accept(tcp.listen_sock,(struct sockaddr *)&local_address,&client_addr_len);
         if (sockfd == -1)
         {
-            print_log("accept socket failed");
+            print_log("accept socket failed \n");
             continue;
         }
-        print_log("accpet socked success!");
+        print_log("accpet socked success! \n");
 
         pthread_t new_client;
         int ret = pthread_create(&new_client,NULL,&accept_request,(void*)&tcp); 
